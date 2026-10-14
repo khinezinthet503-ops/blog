@@ -1,8 +1,10 @@
 
 <x-layout>
-   
+
     <x-hero/>
-    <x-section/>
+    <x-section :blogs="$blogs" :categories="$categories"
+    :currentCategory="$currentCategory ?? null"/>
+    <!-- $currentCategory ? $currentCategory :null -->
     <x-blog-subscribe/>
 
     
