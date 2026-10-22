@@ -11,12 +11,28 @@ class Blog extends Model
     // protected $fillable = ['title','intro','body'];
 
     protected $with=['author','category'];
-    public function scopeFilter($query,$filter){
-       
+    public function scopeFilter($query,$filter)
+    
+    {
         $query->when($filter['search'] ?? false,function($query,$search){
-        $query->where('title','LIKE','%'.$search.'%')
+        $query->where(function($query)use($search) {
+            $query->where('title','LIKE','%'.$search.'%')
                     ->orWhere('body','LIKE','%'.$search.'%');
-    });
+                   
+            });
+        });
+        $query->when($filter['category'] ?? false,function($query,$slug){
+            $query->whereHas('category',function ($query) use($slug) {
+               $query ->where('slug',$slug);
+                
+            });
+        });
+         $query->when($filter['username'] ?? false,function($query,$usernmae){
+            $query->whereHas('author',function ($query) use($usernmae) {
+               $query ->where('username',$usernmae);
+                
+            });
+        });
         
     }
     

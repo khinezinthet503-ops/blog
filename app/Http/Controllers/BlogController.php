@@ -10,15 +10,18 @@ class BlogController extends Controller
 {
     function index() 
     {
-         return view('blogs',[
-        'blogs'=>Blog::latest()->filter(request(['search']))-> get(),//creating custom filter
-        'categories'=>Category::all()
+         return view('blogs.index',[
+        'blogs'=>Blog::latest()
+        ->filter(request(['search','category','username']))//creating custom filter
+        ->paginate(6)
+        ->withQueryString(),
+      
          ]);
     }
 
     function show(Blog $blog) 
     {
-        return view('blog', [
+        return view('blogs.show', [
         'blog' =>$blog,
         'randomBlogs'=>Blog::inRandomOrder()->take(3)->get()
      ]);
